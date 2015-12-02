@@ -7,7 +7,7 @@
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Foobar is distributed in the hope that it will be useful,
+// libuv tutorial is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
@@ -86,12 +86,12 @@ int main(void) {
     struct sockaddr_in addr;
     memset(&addr, 0, sizeof(addr));
 
+    // Convert ipv4 address and port into sockaddr struct
+    uv_ip4_addr("0.0.0.0", PORT, &addr);
+
     // Set up tcp handle
     uv_tcp_t server;
     uv_tcp_init(loop, &server);
-
-    // Resolve ipv4 address into sockaddr object.
-    uv_ip4_addr("0.0.0.0", PORT, &addr);
 
     // Bind to socket
     uv_tcp_bind(&server, (const struct sockaddr*)&addr, 0);
@@ -99,7 +99,7 @@ int main(void) {
     // Listen on socket, run new_connection() on every new connection
     int ret = uv_listen((uv_stream_t*) &server, BACKLOG, new_connection);
     if (ret) {
-        fprintf(stderr, "Listen error %s\n", uv_strerror(ret));
+        fprintf(stderr, "Listen error: %s\n", uv_strerror(ret));
         return 1;
     }
 

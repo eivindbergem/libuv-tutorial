@@ -45,7 +45,6 @@ void on_write(uv_write_t *req, int status) {
 // Callback for new connections
 void new_connection(uv_stream_t *server, int status) {
     // Check status code, anything under 0 means an error.
-    // Error codes are -errno.
     if (status < 0) {
         fprintf(stderr, "New connection error: %s\n", uv_strerror(status));
         return;

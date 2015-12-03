@@ -66,7 +66,12 @@ void new_connection(uv_stream_t *server, int status) {
         uv_buf_t bufs[] = {uv_buf_init(s, (unsigned int)strlen(s))};
 
         // Write and call on_write callback when finished
-        uv_write((uv_write_t*)req, (uv_stream_t*)client, bufs, 1, on_write);
+        int ret = uv_write((uv_write_t*)req, (uv_stream_t*)client, bufs, 1, on_write);
+
+        if (ret < 0) {
+            fprintf(stderr, "Write error: %s\n", uv_strerror(ret));
+            uv_close((uv_handle_t*)client, close_client);
+        }
     }
     else {
         // Accept failed, closing client handle
